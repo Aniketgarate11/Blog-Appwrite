@@ -7,61 +7,60 @@ export class AuthService {
 
   constructor() {
     this.client
-        .setEndpoint(conf.appwriteUrl)
-        .setProject(conf.appwriteProjectId);
-    this.account = new Account(this.client)
+      .setEndpoint(conf.appwriteUrl)
+      .setProject(conf.appwriteProjectId);
+    this.account = new Account(this.client);
   }
 
   // to create an Account
-  async createAccount({ email, password , name}){
+  async createAccount({ email, password, name }) {
     try {
-         const userAccount = await this.account.create(ID.unique(), email , password);
+      const userAccount = await this.account.create(
+        ID.unique(),
+        email,
+        password
+      );
 
-         if (userAccount) {
-
-            // return userAccount
-            //call another method to create and login at creation
-            return this.login(email,password)
-            
-         } else {
-             return userAccount
-         }
-        
+      if (userAccount) {
+        // return userAccount
+        //call another method to create and login at creation
+        return this.login(email, password);
+      } else {
+        return userAccount;
+      }
     } catch (error) {
-        console.log(" Appwrite Service :: createAccount :: error", error)
+      console.log(" Appwrite Service :: createAccount :: error", error);
     }
   }
- 
-  // to login 
-  async login({email , password}){
-    try {
 
-       return await this.account.createEmailPasswordSession(email , password)
-        
+  // to login
+  async login({ email, password }) {
+    try {
+      return await this.account.createEmailPasswordSession(email, password);
     } catch (error) {
-        console.log(" Appwrite Service :: loginAccount :: error", error)
-        
+      console.log(" Appwrite Service :: loginAccount :: error", error);
     }
   }
 
   //to check if user is authorized i.e loged in or not
-  async checkAuthenticationState(){
+  async checkAuthenticationState() {
     try {
-        return this.account.get()
-        
+      return this.account.get();
     } catch (error) {
-        console.log(" Appwrite Service :: checkAuthenticationState :: error", error)
+      console.log(
+        " Appwrite Service :: checkAuthenticationState :: error",
+        error
+      );
     }
 
-    return null; 
+    return null;
   }
 
-  async logout(){
+  async logout() {
     try {
-        return this.account.deleteSessions()
-        
+      return this.account.deleteSessions();
     } catch (error) {
-        console.log(" Appwrite Service :: logout :: error", error)
+      console.log(" Appwrite Service :: logout :: error", error);
     }
   }
 }
